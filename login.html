@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Z9 International Software House</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Left Side - Branding -->
+        <div class="auth-brand">
+            <div class="brand-content">
+                <h1><i class="fas fa-code"></i> Z9 International</h1>
+                <h2>Software House</h2>
+                <p>Welcome Back!</p>
+                <p class="brand-description">Access your account to manage your profile, view applications, and explore opportunities across all Z9 platforms.</p>
+                
+                <div class="brand-features">
+                    <div class="feature">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Access All Platforms</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Manage Profile</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-history"></i>
+                        <span>Track History</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Form -->
+        <div class="auth-form-container">
+            <div class="auth-form">
+                <h2>Sign In</h2>
+                <p class="form-subtitle">One account for all Z9 platforms</p>
+
+                <!-- Error Alert -->
+                <div id="errorAlert" class="alert alert-danger" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorMessage"></span>
+                </div>
+
+                <!-- Warning Alert (Suspended Account) -->
+                <div id="warningAlert" class="alert alert-warning" style="display: none;">
+                    <i class="fas fa-shield-alt"></i>
+                    <span id="warningMessage"></span>
+                </div>
+
+                <form id="loginForm">
+                    <!-- Username/Email -->
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i> Username or Email *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username"
+                            placeholder="Enter your username or email"
+                            required
+                            autocomplete="username"
+                        >
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i> Password *
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                placeholder="Enter your password"
+                                required
+                                autocomplete="current-password"
+                            >
+                            <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="form-footer">
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="rememberMe" name="remember_me">
+                            <label for="rememberMe">Remember me for 30 days</label>
+                        </div>
+                        <a href="forgot-password.html" class="forgot-password">Forgot password?</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+
+                    <!-- Divider -->
+                    <div class="divider">or</div>
+
+                    <!-- Social Login (Future) -->
+                    <div class="social-signup">
+                        <button type="button" class="btn-social google" disabled title="Coming soon">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button type="button" class="btn-social github" disabled title="Coming soon">
+                            <i class="fab fa-github"></i> GitHub
+                        </button>
+                    </div>
+
+                    <!-- Signup Link -->
+                    <p class="auth-link">
+                        Don't have an account? 
+                        <a href="signup.html">Create one now</a>
+                    </p>
+                </form>
+
+                <!-- Security Notice -->
+                <div class="security-notice">
+                    <i class="fas fa-lock"></i>
+                    <span>Your login is secure and encrypted</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <p>Signing in...</p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const errorAlert = document.getElementById('errorAlert');
+            const warningAlert = document.getElementById('warningAlert');
+            const errorMessage = document.getElementById('errorMessage');
+            const warningMessage = document.getElementById('warningMessage');
+            const submitBtn = document.querySelector('button[type="submit"]');
+
+            // Clear alerts
+            errorAlert.style.display = 'none';
+            warningAlert.style.display = 'none';
+
+            // Get form data
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+
+            try {
+                const response = await fetch('login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        platform: 'z9-software-house'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Store session token
+                    localStorage.setItem('session_token', result.session_token);
+                    localStorage.setItem('user_data', JSON.stringify(result.user));
+
+                    // If remember me is checked, store token longer
+                    if (rememberMe) {
+                        localStorage.setItem('remember_token', result.session_token);
+                    }
+
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 500);
+                } else {
+                    // Check if account suspended
+                    if (result.message.includes('suspended')) {
+                        warningMessage.textContent = result.message + ' Please contact support for assistance.';
+                        warningAlert.style.display = 'flex';
+                    } else {
+                        errorMessage.textContent = result.message || 'Login failed. Please check your credentials.';
+                        errorAlert.style.display = 'flex';
+                    }
+
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMessage.textContent = 'Network error. Please check your connection.';
+                errorAlert.style.display = 'flex';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+            }
+        });
+
+        // Check if already logged in
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('session_token');
+            if (token) {
+                // Redirect to dashboard if already logged in
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>
