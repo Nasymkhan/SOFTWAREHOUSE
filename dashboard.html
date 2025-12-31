@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Z9 International</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-code"></i>
+                <span>Z9 International</span>
+            </div>
+
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#services" class="nav-link">Services</a>
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#careers" class="nav-link">Careers</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+            </div>
+
+            <div class="nav-right">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i>
+                </button>
+
+                <div class="user-menu">
+                    <button class="user-profile-btn">
+                        <img id="userAvatar" src="https://via.placeholder.com/32" alt="Profile" class="avatar">
+                        <span id="userName">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+
+                    <div class="user-dropdown">
+                        <a href="dashboard.html" class="dropdown-item">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                        <a href="#" onclick="openEditProfile()" class="dropdown-item">
+                            <i class="fas fa-user-cog"></i> Edit Profile
+                        </a>
+                        <a href="#" onclick="viewApplications()" class="dropdown-item">
+                            <i class="fas fa-file-alt"></i> My Applications
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" onclick="logout()" class="dropdown-item danger">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-menu">
+                <a href="#" onclick="showSection('overview')" class="sidebar-link active">
+                    <i class="fas fa-home"></i> Overview
+                </a>
+                <a href="#" onclick="showSection('profile')" class="sidebar-link">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a href="#" onclick="showSection('applications')" class="sidebar-link">
+                    <i class="fas fa-file-alt"></i> Applications
+                </a>
+                <a href="#" onclick="showSection('activity')" class="sidebar-link">
+                    <i class="fas fa-history"></i> Activity Log
+                </a>
+                <a href="#" onclick="showSection('settings')" class="sidebar-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-main">
+            <!-- Overview Section -->
+            <section id="overview" class="dashboard-section active">
+                <h1>Welcome back, <span id="welcomeName">User</span>!</h1>
+
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Job Applications</h3>
+                            <p class="stat-number" id="appCount">0</p>
+                            <small>Total submitted</small>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Profile Status</h3>
+                            <p id="profileStatus" class="stat-badge">Incomplete</p>
+                            <small id="profileStatusMsg">Complete your profile</small>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Accessibility</h3>
+                            <p id="platformCount">3 Platforms</p>
+                            <small>Z9 Software House + More</small>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Account Status</h3>
+                            <p class="stat-badge active">Active</p>
+                            <small id="lastLogin">Never logged in</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h2>Quick Actions</h2>
+                    <div class="actions-grid">
+                        <button class="action-card" onclick="openEditProfile()">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit Profile</span>
+                        </button>
+                        <button class="action-card" onclick="scrollToJobs()">
+                            <i class="fas fa-briefcase"></i>
+                            <span>View Jobs</span>
+                        </button>
+                        <button class="action-card" onclick="downloadResume()">
+                            <i class="fas fa-download"></i>
+                            <span>Download CV</span>
+                        </button>
+                        <button class="action-card" onclick="showSection('settings')">
+                            <i class="fas fa-sliders-h"></i>
+                            <span>Settings</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="dashboard-section">
+                <h1>My Profile</h1>
+
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-pic-container">
+                            <img id="profilePic" src="https://via.placeholder.com/120" alt="Profile" class="profile-pic">
+                            <label class="pic-upload-label">
+                                <i class="fas fa-camera"></i>
+                                <input type="file" id="picUpload" accept="image/*" style="display: none;">
+                            </label>
+                        </div>
+                        <div class="profile-info">
+                            <h2 id="displayName">User Name</h2>
+                            <p id="displayEmail">user@example.com</p>
+                            <p id="displayLocation">Location</p>
+                            <span class="badge badge-success" id="accountStatus">Active</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-details">
+                        <div class="detail-row">
+                            <span class="label">Username:</span>
+                            <span id="dispUsername">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Email:</span>
+                            <span id="dispEmail">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Country:</span>
+                            <span id="dispCountry">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Location:</span>
+                            <span id="dispLocation">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Member Since:</span>
+                            <span id="memberSince">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Last Login:</span>
+                            <span id="lastLoginTime">-</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="openEditProfile()">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+            </section>
+
+            <!-- Applications Section -->
+            <section id="applications" class="dashboard-section">
+                <h1>My Job Applications</h1>
+                <p class="section-subtitle">Track and manage all your job applications</p>
+
+                <div id="applicationsContainer">
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No applications yet</h3>
+                        <p>Start applying to available positions to see them here</p>
+                        <button class="btn btn-primary" onclick="scrollToJobs()">
+                            Browse Jobs
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Log Section -->
+            <section id="activity" class="dashboard-section">
+                <h1>Activity Log</h1>
+                <p class="section-subtitle">Your recent account activity</p>
+
+                <div class="activity-list">
+                    <div id="activityContainer">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i> Loading activity...
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="dashboard-section">
+                <h1>Account Settings</h1>
+
+                <div class="settings-card">
+                    <h3>Privacy Settings</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Profile Visibility</h4>
+                            <p>Control who can see your profile</p>
+                        </div>
+                        <select class="form-control">
+                            <option>Public</option>
+                            <option>Private</option>
+                            <option>Restricted</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Email Notifications</h4>
+                            <p>Receive updates about applications</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-card danger-zone">
+                    <h3>Danger Zone</h3>
+                    <button class="btn btn-danger" onclick="changePassword()">
+                        <i class="fas fa-key"></i> Change Password
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteAccount()">
+                        <i class="fas fa-trash"></i> Delete Account
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="modal-close" onclick="closeEditProfile()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="editName" placeholder="Your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Country *</label>
+                    <input type="text" id="editCountry" placeholder="Your country" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Location *</label>
+                    <input type="text" id="editLocation" placeholder="City or region" required>
+                    <small>Required to use the platform</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Profile Picture</label>
+                    <input type="file" id="editProfilePic" accept="image/*">
+                    <small>JPG, PNG or GIF (max 5MB)</small>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditProfile()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Load user data on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if logged in
+            if (!isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load and display user profile
+            await loadDashboard();
+
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        /**
+         * Load dashboard data
+         */
+        async function loadDashboard() {
+            const user = await fetchUserProfile();
+
+            if (!user) {
+                logout();
+                return;
+            }
+
+            // Display user info
+            document.getElementById('userName').textContent = user.full_name || user.username;
+            document.getElementById('welcomeName').textContent = user.full_name || user.username;
+            document.getElementById('displayName').textContent = user.full_name || user.username;
+            document.getElementById('displayEmail').textContent = user.email;
+            document.getElementById('displayLocation').textContent = user.location || 'Not set';
+
+            // Display detailed info
+            document.getElementById('dispUsername').textContent = user.username;
+            document.getElementById('dispEmail').textContent = user.email;
+            document.getElementById('dispCountry').textContent = user.country || 'Not set';
+            document.getElementById('dispLocation').textContent = user.location || 'Not set';
+            document.getElementById('memberSince').textContent = formatDate(user.created_at);
+            document.getElementById('lastLoginTime').textContent = user.last_login ? timeAgo(user.last_login) : 'First login';
+
+            // Set profile picture
+            if (user.profile_pic_url) {
+                document.getElementById('profilePic').src = user.profile_pic_url;
+                document.getElementById('userAvatar').src = user.profile_pic_url;
+            }
+
+            // Set edit form values
+            document.getElementById('editName').value = user.full_name || '';
+            document.getElementById('editCountry').value = user.country || '';
+            document.getElementById('editLocation').value = user.location || '';
+        }
+
+        /**
+         * Show/hide sections
+         */
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+
+            // Remove active from all links
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Mark link as active
+            event.target.closest('.sidebar-link').classList.add('active');
+        }
+
+        /**
+         * Open edit profile modal
+         */
+        function openEditProfile() {
+            document.getElementById('editProfileModal').style.display = 'flex';
+        }
+
+        /**
+         * Close edit profile modal
+         */
+        function closeEditProfile() {
+            document.getElementById('editProfileModal').style.display = 'none';
+        }
+
+        /**
+         * Handle profile form submission
+         */
+        function setupEventListeners() {
+            document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const name = document.getElementById('editName').value;
+                const country = document.getElementById('editCountry').value;
+                const location = document.getElementById('editLocation').value;
+                const fileInput = document.getElementById('editProfilePic');
+
+                // Upload profile picture if selected
+                if (fileInput.files.length > 0) {
+                    const result = await uploadProfilePicture(fileInput.files[0]);
+                    if (!result.success) {
+                        alert('Picture upload failed: ' + result.message);
+                        return;
+                    }
+                }
+
+                // Update profile
+                const result = await updateUserProfile({
+                    full_name: name,
+                    country: country,
+                    location: location
+                });
+
+                if (result.success) {
+                    alert('Profile updated successfully!');
+                    closeEditProfile();
+                    location.reload();
+                } else {
+                    alert('Update failed: ' + result.message);
+                }
+            });
+
+            // Handle profile picture upload
+            document.getElementById('picUpload').addEventListener('change', async (e) => {
+                if (e.target.files.length > 0) {
+                    const result = await uploadProfilePicture(e.target.files[0]);
+                    if (result.success) {
+                        document.getElementById('profilePic').src = result.profile_pic_url;
+                        document.getElementById('userAvatar').src = result.profile_pic_url;
+                    }
+                }
+            });
+        }
+
+        /**
+         * Scroll to jobs section on home page
+         */
+        function scrollToJobs() {
+            window.location.href = 'index.html#careers';
+        }
+
+        /**
+         * Download resume/CV
+         */
+        function downloadResume() {
+            alert('Resume download feature coming soon!');
+        }
+
+        /**
+         * Change password
+         */
+        function changePassword() {
+            alert('Password change feature coming soon!');
+        }
+
+        /**
+         * Delete account
+         */
+        function deleteAccount() {
+            if (confirm('Are you sure? This action cannot be undone!')) {
+                alert('Account deletion feature coming soon!');
+            }
+        }
+
+        /**
+         * Toggle theme
+         */
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+
+    <style>
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 70px);
+            margin-top: 70px;
+        }
+
+        .dashboard-sidebar {
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+            position: sticky;
+            top: 70px;
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        body.dark-mode .dashboard-sidebar {
+            background: #1a1a2e;
+            border-right-color: #333;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .sidebar-link {
+            color: #aaa;
+        }
+
+        .sidebar-link:hover {
+            background: #f5f5f5;
+            color: #667eea;
+            padding-left: 25px;
+        }
+
+        body.dark-mode .sidebar-link:hover {
+            background: #2a2a4e;
+            color: #667eea;
+        }
+
+        .sidebar-link.active {
+            background: #f0f0ff;
+            color: #667eea;
+            border-right: 3px solid #667eea;
+            font-weight: 600;
+        }
+
+        body.dark-mode .sidebar-link.active {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .dashboard-main {
+            padding: 40px;
+            overflow-y: auto;
+            max-height: calc(100vh - 70px);
+        }
+
+        body.dark-mode .dashboard-main {
+            background: #0f0f1e;
+            color: #e0e0e0;
+        }
+
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-section h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        body.dark-mode .dashboard-section h1 {
+            color: #e0e0e0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .stat-card {
+            background: #1a1a2e;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: #f0f0ff;
+            border-radius: 12px;
+        }
+
+        body.dark-mode .stat-icon {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+            margin: 5px 0;
+        }
+
+        body.dark-mode .stat-number {
+            color: #e0e0e0;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark-mode .profile-card {
+            background: #1a1a2e;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            align-items: flex-start;
+        }
+
+        .profile-pic-container {
+            position: relative;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid #667eea;
+        }
+
+        .pic-upload-label {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .pic-upload-label:hover {
+            background: #764ba2;
+        }
+
+        .profile-info h2 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        body.dark-mode .profile-info h2 {
+            color: #e0e0e0;
+        }
+
+        .profile-info p {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .profile-info p {
+            color: #aaa;
+        }
+
+        .profile-details {
+            margin: 30px 0;
+            padding: 20px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .profile-details {
+            border-color: #333;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            padding: 10px 0;
+        }
+
+        .detail-row .label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        body.dark-mode .detail-row .label {
+            color: #aaa;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.3s ease;
+        }
+
+        body.dark-mode .modal-content {
+            background: #1a1a2e;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .modal-header {
+            border-bottom-color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .modal-footer {
+            border-top-color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-sidebar {
+                position: relative;
+                top: auto;
+                max-height: auto;
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                overflow: visible;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                overflow-x: auto;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-main {
+                padding: 20px;
+            }
+        }
+    </style>
+</body>
+</html>
